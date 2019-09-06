@@ -5,6 +5,11 @@
  */
 package gui;
 
+import Esfera.Esfera;
+import Esfera.Esfera.EsferaBuilder;
+import Factory.EsferaFactory;
+import ObjectPool.ConcreteObjectPool;
+import Prototype.PrototypeFactory;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -13,6 +18,7 @@ import java.awt.event.ActionListener;
 import java.awt.Graphics;
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -56,6 +62,7 @@ public class Ventana extends JFrame{
         cargarSliders();
         cargarVelocidades();
         cargarPatron();
+        incializarPrototype();
 	mostrarVentana();
     }
     
@@ -212,4 +219,62 @@ public class Ventana extends JFrame{
         add(comboPatron);
     }
     
+    private ArrayList<Esfera> createEsferasBuilder(int velocidad,Color color,int direccion,Vector posicion,int cantidad){
+        EsferaBuilder builder = new EsferaBuilder();
+        ArrayList<Esfera> newEsferas = new ArrayList<>();
+        
+        while(cantidad!=0){
+            Esfera esferaNew = builder.setColor(color).setDireccion(direccion).setColor(color).setVelocidad(velocidad).build();
+            newEsferas.add(esferaNew);
+            builder = new EsferaBuilder();
+            cantidad-=1;
+        }
+        return newEsferas;
+    }
+    
+    private ArrayList<Esfera> createEsferasFactory(int velocidad,Color color,int direccion,Vector posicion,int cantidad){
+         ArrayList<Esfera> newEsferas = new ArrayList<>();
+         EsferaFactory factory =  new EsferaFactory();
+         
+         while(cantidad!=0){
+             Esfera esferaNew = factory.CreateEsfera(velocidad, color, direccion, posicion);
+             newEsferas.add(esferaNew);
+             cantidad-=1;
+         }
+         return newEsferas;
+    }
+    
+    private ArrayList<Esfera> createEsferasPrototype(int velocidad,Color color,int direccion,Vector posicion,int cantidad){
+         ArrayList<Esfera> newEsferas = new ArrayList<>();
+         
+         while(cantidad!=0){
+             Esfera esferaNew = (Esfera)PrototypeFactory.obtenerPrototipo("template");
+             esferaNew.setColor(color);
+             esferaNew.setDireccion(direccion);
+             esferaNew.setPosicion(posicion);
+             esferaNew.setVelocidad(velocidad);
+             newEsferas.add(esferaNew);
+             cantidad-=1;
+         }
+         return newEsferas;
+    }
+    
+    private ArrayList<Esfera> createEsferasObjectPool(int velocidad,Color color,int direccion,Vector posicion,int cantidad){
+         ArrayList<Esfera> newEsferas = new ArrayList<>();
+         ConcreteObjectPool pool = new ConcreteObjectPool(0,10000,25);
+         
+         while(cantidad!=0){
+             Esfera esferaNew = (Esfera)pool.getObject(velocidad, color, direccion, posicion);
+             newEsferas.add(esferaNew);
+             cantidad-=1;
+         }
+         return newEsferas;
+    }
+
+    private void incializarPrototype() {
+        Esfera esf = new Esfera(0,Color.RED,0,new Vector(0,0));
+        PrototypeFactory.anadirPrototipo("template",esf);
+    }
+
+     
 }

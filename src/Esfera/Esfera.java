@@ -98,7 +98,7 @@ public class Esfera implements IPrototype,IPoolableObject,IFigura{
             return this;
         }
         @Override
-        public Object build() {
+        public Esfera build() {
             return new Esfera(this.velocidad,this.color,this.direccion,this.posicion);
         }
         

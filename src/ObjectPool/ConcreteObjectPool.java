@@ -30,7 +30,10 @@ public class ConcreteObjectPool extends AbstractObjectPool {
     public IPoolableObject getObject(int velocidad,Color color,int direccion,Vector posicion) {
         if(this.getMin() !=this.getMax()){
             ConcreteObjectFactory fact = new ConcreteObjectFactory();
-            return fact.createNew(velocidad,color,direccion,posicion);
+            Esfera ret = (Esfera)fact.createNew(velocidad,color,direccion,posicion);
+            this.inUse.add(ret);
+            return ret;
+            
         }
         return unused.pop();
     }

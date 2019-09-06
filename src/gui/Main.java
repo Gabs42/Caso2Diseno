@@ -5,6 +5,7 @@
  */
 package gui;
 
+import Prototype.PrototypeFactory;
 import java.io.FileNotFoundException;
 
 /**
@@ -13,6 +14,7 @@ import java.io.FileNotFoundException;
  */
 public class Main {
     public static void main(String[] args){
+        
     	Ventana ventana = new Ventana();
         
     }
