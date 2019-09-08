@@ -5,17 +5,13 @@
  */
 package gui;
 
-import Prototype.PrototypeFactory;
-import java.io.FileNotFoundException;
-
 /**
  *
  * @author Gabriel
  */
 public class Main {
-    public static void main(String[] args){
-        
+    public static void main(String[] args){   
     	Ventana ventana = new Ventana();
-        
+    	ventana.iniciarAnimacion();
     }
 }

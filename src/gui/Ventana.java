@@ -34,7 +34,15 @@ import javax.swing.event.ChangeListener;
  *
  * @author Gabriel
  */
-public class Ventana extends JFrame{
+public class Ventana extends JFrame {
+    
+    Animacion canvas;
+    
+    int xCanvas = 240;
+    int yCanvas = 10;
+    int largoCanvas = 620;
+    int anchoCanvas = 420;
+    
     JButton botonCrear;
     JButton botonNuevo;
     JPanel contenedor;
@@ -47,7 +55,6 @@ public class Ventana extends JFrame{
     
     Color colorEsfera;
     
-    private int pintar = 0;
     private ArrayList<String> direcciones = new ArrayList<>();
     private ArrayList<Integer> velocidades = new ArrayList<>();
     private ArrayList<String> patrones = new ArrayList<>();
@@ -56,64 +63,45 @@ public class Ventana extends JFrame{
      
     public Ventana(){
         cargarVentana();
-	cargarBotones();
-	//cargarMostrador();
+        cargarBotones();
         cargarDireccion();
         cargarSliders();
         cargarVelocidades();
+        cargarCanvas();
         cargarPatron();
         incializarPrototype();
-	mostrarVentana();
+        mostrarVentana();
+    }
+    
+    public void iniciarAnimacion() {
+      canvas.iniciarAnimacion();
     }
     
     private void cargarVentana() {
-	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	setSize(900, 480);
+      setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      setSize(900, 480);
     }
     
     private void cargarBotones() {
-	botonNuevo = new JButton("Crear Esferas");
-	botonNuevo.setBounds(20, 400, 130, 30);
-	botonNuevo.addActionListener(new ActionListener() {      
+      botonNuevo = new JButton("Crear Esferas");
+	  botonNuevo.setBounds(20, 400, 130, 30);
+	  botonNuevo.addActionListener(new ActionListener() {      
 	    @Override
-            public void actionPerformed(ActionEvent e) {
-                
-                agregarEsfera();
-	}          
-    	});
-	add(botonNuevo);
-
-    }
-    
-    private void cargarMostrador() {
-	contenedor = new JPanel();
-	contenedor.setBackground(Color.white);
-	labelContenedor = new JLabel("");
-	contenedor.add(labelContenedor);
-        add(contenedor);
+	    public void actionPerformed(ActionEvent e) {          
+          agregarEsfera();
+	    }          
+      });
+	  add(botonNuevo);
     }
     
     private void mostrarVentana() {
         setLayout(null);
-	setVisible(true);
+        setVisible(true);
     }
     
-    @Override
-    public void paint(Graphics g){
-        super.paint(g);
-        if(pintar == 0){
-            
-        }
-        else{
-           g.setColor(colorEsfera);
-           g.fillOval(450,240,10,10); 
-        }
-        
-    }
     
     private void agregarEsfera(){
-        pintar = 1;
-        repaint();
+        canvas.repaint();
     }
 
     private void cargarDireccion() {
@@ -277,4 +265,10 @@ public class Ventana extends JFrame{
     }
 
      
+    private void cargarCanvas() {
+      canvas = new Animacion();
+      canvas.setBounds(xCanvas, yCanvas, largoCanvas, anchoCanvas);
+      add(canvas);
+    }
+    
 }

@@ -10,5 +10,5 @@ package Esfera;
  * @author Gabriel
  */
 public interface IFigura {
-    public void actualizar();
+    public void actualizar(int largo, int ancho, int diametro);
 }
