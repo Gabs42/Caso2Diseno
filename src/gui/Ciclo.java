@@ -6,15 +6,13 @@ import Esfera.Esfera;
 
 public class Ciclo implements Runnable {
   
-  ArrayList<Esfera> esferas;
   Animacion canvas;
   int sleep;
   boolean continuar;
   
-  public Ciclo(Animacion canvas, ArrayList<Esfera> esferas, int sleep) {
+  public Ciclo(Animacion canvas, int sleep) {
     this.canvas = canvas;
     this.sleep = sleep;
-    this.esferas = esferas;
     this.continuar = true;
   }
   
@@ -41,6 +39,7 @@ public class Ciclo implements Runnable {
   }
 
   private void actualizarEsferas() {
+    ArrayList<Esfera> esferas = canvas.getEsferas();
     for(int i = 0; i < esferas.size(); i++) {
       Esfera esfera = esferas.get(i);
       esfera.actualizar(canvas.getWidth(), canvas.getHeight(), canvas.getDiametro());

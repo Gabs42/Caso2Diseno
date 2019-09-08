@@ -75,8 +75,8 @@ public class Esfera implements IPrototype,IPoolableObject,IFigura{
     @Override
     public void actualizar(int largo, int ancho, int diametro) {
       comprobarColision(largo, ancho, diametro);
-      posicion.set(0, clamp(posicion.get(0) + velX, 0, largo));
-      posicion.set(1, clamp(posicion.get(1) - velY, 0, ancho));
+      posicion.set(0, clamp(posicion.get(0) + velX, 0, largo - diametro));
+      posicion.set(1, clamp(posicion.get(1) - velY, 0, ancho - diametro));
     }
     
     private int clamp(int value, int min, int max) {

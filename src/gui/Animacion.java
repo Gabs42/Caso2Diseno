@@ -26,24 +26,9 @@ public class Animacion extends JPanel {
   
   Ciclo ciclo;
   
-  Color[] colores = {Color.RED, Color.BLUE, Color.YELLOW, Color.CYAN};
-  
   public Animacion() {
     esferas = new ArrayList<Esfera>();
-    Random r = new Random();
-    for(int i = 0; i < 1000; i++) {
-      int x = r.nextInt((300 - 30) + 1) + 30;
-      int y = r.nextInt((400 - 30) + 1) + 30;
-      int angle = r.nextInt((360 - 0) + 1) + 0;
-      int vel = r.nextInt((7 - 3) + 1) + 3;
-      Color color = colores[r.nextInt((3 - 0) + 1) + 0];
-      Vector<Integer> vector = new Vector<Integer>(2, 1);
-      vector.add(0, x);
-      vector.add(1, y);
-      Esfera esfera = new Esfera(5, color, angle, vector);
-      esferas.add(esfera);
-    }
-    ciclo = new Ciclo(this, esferas, frames);
+    ciclo = new Ciclo(this, frames);
   }
   
   public void iniciarAnimacion() {
@@ -57,6 +42,10 @@ public class Animacion extends JPanel {
   
   public synchronized void setEsferas(ArrayList<Esfera> esferas) {
     this.esferas = esferas;
+  }
+  
+  public synchronized ArrayList<Esfera> getEsferas() {
+    return esferas;
   }
   
   public void paint(Graphics g) {

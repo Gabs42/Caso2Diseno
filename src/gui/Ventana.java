@@ -18,6 +18,7 @@ import java.awt.event.ActionListener;
 import java.awt.Graphics;
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
@@ -87,8 +88,24 @@ public class Ventana extends JFrame {
 	  botonNuevo.setBounds(20, 400, 130, 30);
 	  botonNuevo.addActionListener(new ActionListener() {      
 	    @Override
-	    public void actionPerformed(ActionEvent e) {          
-          agregarEsfera();
+	    public void actionPerformed(ActionEvent e) {   
+	      /*Color[] colores = {Color.RED, Color.BLUE, Color.YELLOW, Color.CYAN};
+	      Random r = new Random();
+	      ArrayList<Esfera> esferas = canvas.getEsferas();
+	      for(int i = 0; i < 10; i++) {
+	        int x = r.nextInt((300 - 30) + 1) + 30;
+	        int y = r.nextInt((400 - 30) + 1) + 30;
+	        int angle = r.nextInt((360 - 0) + 1) + 0;
+	        int vel = r.nextInt((7 - 3) + 1) + 3;
+	        Color color = colores[r.nextInt((3 - 0) + 1) + 0];
+	        Vector<Integer> vector = new Vector<Integer>(2, 1);
+	        vector.add(0, x);
+	        vector.add(1, y);
+	        Esfera esfera = new Esfera(5, color, angle, vector);
+	        esferas.add(esfera);
+	      }
+	      canvas.setEsferas(esferas);*/ //Ejemplo de como crear y anadir esferas
+	      agregarEsfera();
 	    }          
       });
 	  add(botonNuevo);
