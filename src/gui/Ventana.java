@@ -29,6 +29,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
+import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 /**
@@ -53,6 +54,7 @@ public class Ventana extends JFrame {
     JComboBox<Integer> comboVelocidad;
     JComboBox<String> comboPatron;
     JSlider red,green,blue;
+    JTextField cantidad;
     
     Color colorEsfera;
     
@@ -70,7 +72,9 @@ public class Ventana extends JFrame {
         cargarVelocidades();
         cargarCanvas();
         cargarPatron();
+        cargarCantidad();
         incializarPrototype();
+        cambiarColor();
         mostrarVentana();
     }
     
@@ -89,6 +93,7 @@ public class Ventana extends JFrame {
 	  botonNuevo.addActionListener(new ActionListener() {      
 	    @Override
 	    public void actionPerformed(ActionEvent e) {   
+               
 	      /*Color[] colores = {Color.RED, Color.BLUE, Color.YELLOW, Color.CYAN};
 	      Random r = new Random();
 	      ArrayList<Esfera> esferas = canvas.getEsferas();
@@ -105,6 +110,7 @@ public class Ventana extends JFrame {
 	        esferas.add(esfera);
 	      }
 	      canvas.setEsferas(esferas);*/ //Ejemplo de como crear y anadir esferas
+              crearEsferas();
 	      agregarEsfera();
 	    }          
       });
@@ -122,14 +128,14 @@ public class Ventana extends JFrame {
     }
 
     private void cargarDireccion() {
-        direcciones.add("0º");
-        direcciones.add("45º");
-        direcciones.add("90º");
-        direcciones.add("135º");
-        direcciones.add("180º");
-        direcciones.add("225º");
-        direcciones.add("270º");
-        direcciones.add("315º");
+        direcciones.add("0");
+        direcciones.add("45");
+        direcciones.add("90");
+        direcciones.add("135");
+        direcciones.add("180");
+        direcciones.add("225");
+        direcciones.add("270");
+        direcciones.add("315");
         JLabel labelDirecciones = new JLabel("Direcciones:");
 	labelDirecciones.setBounds(10,5,150,100);
         comboDireccion = new JComboBox<>();
@@ -139,6 +145,16 @@ public class Ventana extends JFrame {
         comboDireccion.setBounds(90, 40, 130, 30);
         add(labelDirecciones);
         add(comboDireccion);
+    }
+    
+    private void cargarCantidad(){
+        JLabel labelCantidad = new JLabel("Cantidad:");
+        cantidad = new JTextField(30);
+        
+        labelCantidad.setBounds(10,325,130,80);
+        cantidad.setBounds(90, 350, 70, 30);
+        add(labelCantidad);
+        add(cantidad);
     }
 
     private void cargarSliders() {
@@ -212,7 +228,7 @@ public class Ventana extends JFrame {
         patrones.add("Builder");
         patrones.add("Factory");
         patrones.add("Prototype");
-        patrones.add("ObjecPool");
+        patrones.add("ObjectPool");
         JLabel labelPatrones = new JLabel("Patron:");
 	labelPatrones.setBounds(10,255,150,100);
         comboPatron = new JComboBox<>();
@@ -224,12 +240,18 @@ public class Ventana extends JFrame {
         add(comboPatron);
     }
     
-    private ArrayList<Esfera> createEsferasBuilder(int velocidad,Color color,int direccion,Vector posicion,int cantidad){
+    private ArrayList<Esfera> createEsferasBuilder(int velocidad,Color color,int direccion,int cantidad){
+        Random r = new Random();
         EsferaBuilder builder = new EsferaBuilder();
         ArrayList<Esfera> newEsferas = new ArrayList<>();
         
         while(cantidad!=0){
-            Esfera esferaNew = builder.setColor(color).setDireccion(direccion).setColor(color).setVelocidad(velocidad).build();
+            int x = r.nextInt((300 - 30) + 1) + 30;
+            int y = r.nextInt((400 - 30) + 1) + 30;
+            Vector<Integer> vector = new Vector<Integer>(2, 1);
+            vector.add(0, x);
+            vector.add(1, y);
+            Esfera esferaNew = builder.setColor(color).setDireccion(direccion).setPosicion(vector).setVelocidad(velocidad).build();
             newEsferas.add(esferaNew);
             builder = new EsferaBuilder();
             cantidad-=1;
@@ -237,47 +259,64 @@ public class Ventana extends JFrame {
         return newEsferas;
     }
     
-    private ArrayList<Esfera> createEsferasFactory(int velocidad,Color color,int direccion,Vector posicion,int cantidad){
+    private ArrayList<Esfera> createEsferasFactory(int velocidad,Color color,int direccion,int cantidad){
+        Random r = new Random();
          ArrayList<Esfera> newEsferas = new ArrayList<>();
          EsferaFactory factory =  new EsferaFactory();
          
          while(cantidad!=0){
-             Esfera esferaNew = factory.CreateEsfera(velocidad, color, direccion, posicion);
-             newEsferas.add(esferaNew);
-             cantidad-=1;
+            int x = r.nextInt((300 - 30) + 1) + 30;
+            int y = r.nextInt((400 - 30) + 1) + 30;
+            Vector<Integer> vector = new Vector<Integer>(2, 1);
+            vector.add(0, x);
+            vector.add(1, y);
+            Esfera esferaNew = factory.CreateEsfera(velocidad, color, direccion, vector);
+            newEsferas.add(esferaNew);
+            cantidad-=1;
          }
          return newEsferas;
     }
     
-    private ArrayList<Esfera> createEsferasPrototype(int velocidad,Color color,int direccion,Vector posicion,int cantidad){
-         ArrayList<Esfera> newEsferas = new ArrayList<>();
-         
+    private ArrayList<Esfera> createEsferasPrototype(int velocidad,Color color,int direccion,int cantidad){
+        Random r = new Random();
+        ArrayList<Esfera> newEsferas = new ArrayList<>();
          while(cantidad!=0){
-             Esfera esferaNew = (Esfera)PrototypeFactory.obtenerPrototipo("template");
-             esferaNew.setColor(color);
-             esferaNew.setDireccion(direccion);
-             esferaNew.setPosicion(posicion);
-             esferaNew.setVelocidad(velocidad);
-             newEsferas.add(esferaNew);
-             cantidad-=1;
+            int x = r.nextInt((300 - 30) + 1) + 30;
+            int y = r.nextInt((400 - 30) + 1) + 30;
+            Vector<Integer> vector = new Vector<Integer>(2, 1);
+            vector.add(0, x);
+            vector.add(1, y);
+            Esfera esferaNew = (Esfera)PrototypeFactory.obtenerPrototipo("template");
+            esferaNew.setColor(color);
+            esferaNew.setDireccion(direccion);
+            esferaNew.setPosicion(vector);
+            esferaNew.setVelocidad(velocidad);
+            newEsferas.add(esferaNew);
+            cantidad-=1;
          }
          return newEsferas;
     }
     
-    private ArrayList<Esfera> createEsferasObjectPool(int velocidad,Color color,int direccion,Vector posicion,int cantidad){
+    private ArrayList<Esfera> createEsferasObjectPool(int velocidad,Color color,int direccion,int cantidad){
+        Random r = new Random();
          ArrayList<Esfera> newEsferas = new ArrayList<>();
          ConcreteObjectPool pool = new ConcreteObjectPool(0,10000,25);
          
          while(cantidad!=0){
-             Esfera esferaNew = (Esfera)pool.getObject(velocidad, color, direccion, posicion);
-             newEsferas.add(esferaNew);
-             cantidad-=1;
+            int x = r.nextInt((300 - 30) + 1) + 30;
+            int y = r.nextInt((400 - 30) + 1) + 30;
+            Vector<Integer> vector = new Vector<Integer>(2, 1);
+            vector.add(0, x);
+            vector.add(1, y);
+            Esfera esferaNew = (Esfera)pool.getObject(velocidad, color, direccion, vector);
+            newEsferas.add(esferaNew);
+            cantidad-=1;
          }
          return newEsferas;
     }
 
     private void incializarPrototype() {
-        Esfera esf = new Esfera(0,Color.RED,0,new Vector(0,0));
+        Esfera esf = new Esfera(1,Color.RED,0,new Vector(0,0));
         PrototypeFactory.anadirPrototipo("template",esf);
     }
 
@@ -287,5 +326,71 @@ public class Ventana extends JFrame {
       canvas.setBounds(xCanvas, yCanvas, largoCanvas, anchoCanvas);
       add(canvas);
     }
+    
+    private void crearEsferas(){
+        if(validarCantidad()){
+        }
+        else{
+            long start = System.nanoTime();
+            String patron = (String)this.comboPatron.getSelectedItem();
+            int velocidad = (Integer)this.comboVelocidad.getSelectedItem();
+            int direccion = Integer.parseInt((String)this.comboDireccion.getSelectedItem());
+            int cantidad = Integer.parseInt(this.cantidad.getText());
+            ArrayList<Esfera> newEsferas = new ArrayList<>();
+            ArrayList<Esfera> esferasExistentes = canvas.getEsferas();
+        
+            switch(patron){
+                case "Builder":
+                    newEsferas = this.createEsferasBuilder(velocidad, colorEsfera, direccion, cantidad);
+                    long end = System.nanoTime();
+                    mostrarEmergente("Se tomo: "+Long.toString(end-start)+"ns");
+                    esferasExistentes.addAll(newEsferas);
+                    canvas.setEsferas(esferasExistentes);
+                    break;
+                
+                case "Factory":
+                    newEsferas = this.createEsferasFactory(velocidad, colorEsfera, direccion, cantidad);
+                    long endFact = System.nanoTime();
+                    mostrarEmergente("Se tomo: "+Long.toString(endFact-start)+"ns");
+                    esferasExistentes.addAll(newEsferas);
+                    
+                    canvas.setEsferas(esferasExistentes);
+                    break;
+                
+                case "Prototype":
+                    newEsferas = this.createEsferasPrototype(velocidad, colorEsfera, direccion, cantidad);
+                    long endProt = System.nanoTime();
+                    mostrarEmergente("Se tomo: "+Long.toString(endProt-start)+"ns");
+                    esferasExistentes.addAll(newEsferas);
+                    canvas.setEsferas(esferasExistentes);
+                    break;
+                
+                case "ObjectPool":
+                    newEsferas = this.createEsferasObjectPool(velocidad, colorEsfera, direccion, cantidad);
+                    long endObj = System.nanoTime();
+                    mostrarEmergente("Se tomo: "+Long.toString(endObj-start)+"ns");
+                    esferasExistentes.addAll(newEsferas);
+                    canvas.setEsferas(esferasExistentes);
+                    break;
+                
+            }
+        }
+        
+    }
+    
+    private boolean validarCantidad(){
+        try{
+            int test = Integer.parseInt(cantidad.getText());
+            return false;
+        }catch(NumberFormatException e){
+            mostrarEmergente("Debe de tener un integer en la cantidad");
+            return true;
+        }
+    }
+    
+    public void mostrarEmergente(String mensaje) {
+		Emergente emergente = new Emergente(mensaje);
+		emergente.mostrar();
+	}
     
 }

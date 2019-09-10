@@ -39,6 +39,7 @@ public class Esfera implements IPrototype,IPoolableObject,IFigura{
 
     public void setVelocidad(int velocidad) {
         this.velocidad = velocidad;
+        calcularVelocidad();
     }
 
     public Color getColor() {
